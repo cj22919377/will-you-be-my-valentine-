@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine 💘</title>
 
 <style>
@@ -17,59 +17,65 @@
     overflow: hidden;
   }
 
-  #desktopBlock {
-    display: none;
-    font-size: 1.5rem;
+  #card {
+    background: white;
+    padding: 30px 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
     text-align: center;
-  }
-
-  #container {
-    text-align: center;
+    width: min(90vw, 320px);
     position: relative;
   }
 
   h1 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    transition: all 0.4s ease;
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+  }
+
+  .buttons {
+    position: relative;
+    height: 120px;
   }
 
   button {
-    font-size: 1.2rem;
-    padding: 14px 28px;
+    font-size: 1.1rem;
+    padding: 14px 0;
+    width: 120px;
     border: none;
     border-radius: 14px;
     cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: transform 0.25s ease;
   }
 
   #yes {
     background: #ff3b6b;
     color: white;
-    margin-right: 10px;
+    z-index: 2;
   }
 
   #no {
-    background: #444;
+    background: #555;
     color: white;
     position: absolute;
+    left: 150px;
+    top: 0;
   }
 
   .heart {
-    position: absolute;
-    font-size: 24px;
-    animation: floatUp 2s ease forwards;
+    position: fixed;
+    font-size: 22px;
+    animation: float 1.8s ease forwards;
     pointer-events: none;
   }
 
-  @keyframes floatUp {
+  @keyframes float {
     0% {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
     100% {
       opacity: 0;
-      transform: translateY(-120px) scale(1.8);
+      transform: translateY(-120px) scale(1.6);
     }
   }
 </style>
@@ -77,26 +83,19 @@
 
 <body>
 
-<div id="desktopBlock">
-  📱 Open this on your phone
-</div>
-
-<div id="container">
+<div id="card">
   <h1 id="text">Will you be my valentine? 💖</h1>
-  <button id="yes">Yes</button>
-  <button id="no">No</button>
+  <div class="buttons">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
 </div>
 
 <script>
-  // MOBILE ONLY
-  if (window.innerWidth > 768) {
-    document.getElementById("container").style.display = "none";
-    document.getElementById("desktopBlock").style.display = "block";
-  }
-
   const yes = document.getElementById("yes");
   const no = document.getElementById("no");
   const text = document.getElementById("text");
+  const card = document.getElementById("card");
 
   let scale = 1;
 
@@ -104,8 +103,12 @@
     scale += 0.15;
     yes.style.transform = `scale(${scale})`;
 
-    const x = Math.random() * (window.innerWidth - no.offsetWidth);
-    const y = Math.random() * (window.innerHeight - no.offsetHeight);
+    const bounds = card.getBoundingClientRect();
+    const maxX = bounds.width - no.offsetWidth;
+    const maxY = bounds.height - no.offsetHeight - 20;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
 
     no.style.left = x + "px";
     no.style.top = y + "px";
@@ -116,20 +119,24 @@
     no.remove();
     text.textContent = "hehe ily 💘";
 
-    for (let i = 0; i < 25; i++) {
-      createHeart();
+    for (let i = 0; i < 30; i++) {
+      spawnHeart();
     }
   });
 
-  function createHeart() {
+  function spawnHeart() {
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.textContent = "💘";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.top = window.innerHeight - 40 + "px";
-    document.body.appendChild(heart);
 
-    setTimeout(() => heart.remove(), 2000);
+    const x = window.innerWidth / 2 + (Math.random() * 120 - 60);
+    const y = window.innerHeight / 2;
+
+    heart.style.left = x + "px";
+    heart.style.top = y + "px";
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1800);
   }
 </script>
 
