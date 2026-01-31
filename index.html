@@ -1,84 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Valentine 💘</title>
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffe6ee;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Valentine 💘</title>
 
-    #container {
-      text-align: center;
-      position: relative;
-    }
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffb6c1, #ffe4ec);
+    font-family: system-ui, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
 
-    h1 {
-      margin-bottom: 30px;
-      font-size: 2.2rem;
-    }
+  #desktopBlock {
+    display: none;
+    font-size: 1.5rem;
+    text-align: center;
+  }
 
-    button {
-      font-size: 1.2rem;
-      padding: 12px 24px;
-      margin: 10px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+  #container {
+    text-align: center;
+    position: relative;
+  }
 
-    #yes {
-      background: #ff4d6d;
-      color: white;
-    }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    transition: all 0.4s ease;
+  }
 
-    #no {
-      background: #555;
-      color: white;
-      position: absolute;
+  button {
+    font-size: 1.2rem;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  #yes {
+    background: #ff3b6b;
+    color: white;
+    margin-right: 10px;
+  }
+
+  #no {
+    background: #444;
+    color: white;
+    position: absolute;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 2s ease forwards;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
-  </style>
+    100% {
+      opacity: 0;
+      transform: translateY(-120px) scale(1.8);
+    }
+  }
+</style>
 </head>
+
 <body>
-  <div id="container">
-    <h1 id="text">Will you be my valentine? 💖</h1>
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
-  </div>
 
-  <script>
-    const yesBtn = document.getElementById("yes");
-    const noBtn = document.getElementById("no");
-    const text = document.getElementById("text");
+<div id="desktopBlock">
+  📱 Open this on your phone
+</div>
 
-    let yesScale = 1;
+<div id="container">
+  <h1 id="text">Will you be my valentine? 💖</h1>
+  <button id="yes">Yes</button>
+  <button id="no">No</button>
+</div>
 
-    noBtn.addEventListener("click", () => {
-      yesScale += 0.2;
-      yesBtn.style.transform = `scale(${yesScale})`;
+<script>
+  // MOBILE ONLY
+  if (window.innerWidth > 768) {
+    document.getElementById("container").style.display = "none";
+    document.getElementById("desktopBlock").style.display = "block";
+  }
 
-      const maxX = window.innerWidth - noBtn.offsetWidth;
-      const maxY = window.innerHeight - noBtn.offsetHeight;
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
+  const text = document.getElementById("text");
 
-      const randX = Math.random() * maxX;
-      const randY = Math.random() * maxY;
+  let scale = 1;
 
-      noBtn.style.left = randX + "px";
-      noBtn.style.top = randY + "px";
-    });
+  no.addEventListener("click", () => {
+    scale += 0.15;
+    yes.style.transform = `scale(${scale})`;
 
-    yesBtn.addEventListener("click", () => {
-      yesBtn.style.display = "none";
-      noBtn.style.display = "none";
-      text.textContent = "hehe ily 💘";
-    });
-  </script>
+    const x = Math.random() * (window.innerWidth - no.offsetWidth);
+    const y = Math.random() * (window.innerHeight - no.offsetHeight);
+
+    no.style.left = x + "px";
+    no.style.top = y + "px";
+  });
+
+  yes.addEventListener("click", () => {
+    yes.remove();
+    no.remove();
+    text.textContent = "hehe ily 💘";
+
+    for (let i = 0; i < 25; i++) {
+      createHeart();
+    }
+  });
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "💘";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight - 40 + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 2000);
+  }
+</script>
+
 </body>
 </html>
